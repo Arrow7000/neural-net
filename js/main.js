@@ -1,24 +1,25 @@
-var path = new Path.Circle(view.center, 100);
-path.fillColor = '#000';
+// var path = new Path.Circle(view.center, 100);
+// path.fillColor = '#000';
 
 // Perceptron class
 function Perceptron(inputNumber) {
-	this.weights = [];
+	this.weightsArray = [];
 	var c = 0.01;
 
 	// Assign random weights to the inputs
 	for (var i = 0; i < inputNumber; i++) {
-		this.weights[i] = Math.random() * 2 - 1;
-		console.log(this.weights[i]);
+		this.weightsArray[i] = Math.random() * 2 - 1;
+		// console.log(this.weightsArray[i]);
 	}
 
 
 
 	// Run inputs through Perceptron and give output
-	this.feedForward = function(inputs) {
+	this.feedForward = function(inputArray) {
 		var sum = 0;
-		for (var i = 0; i < inputs.length; i++) {
-			sum += inputs[i] * this.weights[i]
+		// console.log(inputArray);
+		for (var i = 0; i < inputArray.length; i++) {
+			sum += inputArray[i] * this.weightsArray[i]
 		}
 		return this.activate(sum);
 	}
@@ -29,32 +30,32 @@ function Perceptron(inputNumber) {
 		else return -1;
 	}
 
-	this.train = function(inputs, desired) {
-		var guess = this.feedForward(inputs);
+	this.train = function(inputArray, desired) {
+		var guess = this.feedForward(inputArray);
 		var error = desired - guess;
-		for (var i = 0; i < this.weights.length; i++) {
-			this.weights[i] += c * error * inputs[i];
+		for (var i = 0; i < this.weightsArray.length; i++) {
+			this.weightsArray[i] += c * error * inputArray[i];
 		}
 	}
 
 }
 
 function Trainer(x, y, a) {
-	var inputs = [];
-	var answer;
+	this.inputs = [];
+	this.answer;
 
-	inputs = [];
-	inputs[0] = x;
-	inputs[1] = y;
-	inputs[2] = 1;
+	this.inputs = [];
+	this.inputs[0] = x;
+	this.inputs[1] = y;
+	this.inputs[2] = 1;
 
-	answer = a;
+	this.answer = a;
 }
 
 
 
 
-// Main
+/// Main
 
 // var p = new Perceptron(3);
 // var point = [50, -12, 1];
@@ -66,12 +67,11 @@ function Trainer(x, y, a) {
 
 var ptron,
 	width = view.bounds.width,
-	height = view.bounds.height;
-
-var training = [],
-	traininglength = 2000;
-
-var count = 0;
+	height = view.bounds.height,
+	training = [],
+	traininglength = 2000,
+	count = 0,
+	circ;
 
 function f(x) {
 	return 2 * x + 1;
@@ -80,19 +80,39 @@ function f(x) {
 function setup() {
 	ptron = new Perceptron(3);
 
-	for (var i = 0; i < traininglength.length; i++) {
-		var x = Math.random() * width - width / 2;
-		var y = Math.random() * height - height / 2;
+	for (var i = 0; i < traininglength; i++) {
+		var x = Math.random() * width;
+		var y = Math.random() * height;
 		var answer = 1;
 		if (y < f(x)) answer = -1;
 		training[i] = new Trainer(x, y, answer);
 	}
+	circ = [];
+}
+
+var style = {
+	strokeColor: 'black',
+	strokeWidth: 2
 }
 
 function draw() {
-	ptron.train(training.length.inputs, training.length.answer);
-	console.log(training.length.inputs);
+	// console.log("First trainer:", training[0].inputs);
+	ptron.train(training[training.length - 1].inputs, training[training.length - 1].answer);
+	// console.log(training[length].inputs);
 	count = (count + 1) % training.length;
+	// console.log(training.length);
+
+	for (var i = 0; i < 2000; i++) {
+		var guess = ptron.feedForward(training[i].inputs);
+		var point = new Point(training[i].inputs[0], training[i].inputs[1]);
+		// console.log(point);
+
+		circ.push(new Path.Circle(point, 10));
+		circ[i].style = style;
+		if (guess > 0) {} else {
+			circ[i].fillColor = 'black';
+		}
+	}
 }
 
 setup();
