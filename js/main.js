@@ -67,14 +67,15 @@ var ptron,
 	trainingLength = 2000,
 	count = 0,
 	circ = [],
-	style = {
-		strokeColor: 'black',
-		strokeWidth: 2
-	};
+	color = '#004D40';
+style = {
+	strokeColor: color,
+	strokeWidth: 2
+};
 
 // the line function
 function f(x) {
-	return 9 / 16 * x;
+	return height / width * x;
 }
 
 
@@ -109,29 +110,29 @@ function setup() {
 // Plays every frame
 function onFrame() {
 
-	for (var i = 0; i < 1; i++) { // Controls how many points are placed on the canvas per frame
+	for (var i = 0; i < 10; i++) { // Controls how many points are placed on the canvas per frame
+		if (count < trainingLength) {
+			// ptron gets trained with the list of inputs as first arg and answers as 2nd arg
+			ptron.train(training[count].inputs, training[count].answer);
 
-		// ptron gets trained with the list of inputs as first arg and answers as 2nd arg
-		ptron.train(training[count].inputs, training[count].answer);
-
-		var guess = ptron.feedForward(training[count].inputs);
-		var point = new Point(training[count].inputs[0], training[count].inputs[1]);
-
-
-
-
-		// Draws the circles representing the (x,y) locations of every point
-		circ.push(new Path.Circle(point, 10));
-		circ[count].style = style;
-		if (guess < 0) circ[count].fillColor = 'black';
+			var guess = ptron.feedForward(training[count].inputs);
+			var point = new Point(training[count].inputs[0], training[count].inputs[1]);
 
 
 
-		// Increments the count
-		count = (count + 1) % training.length;
-		console.log("count:", count);
+
+			// Draws the circles representing the (x,y) locations of every point
+			circ.push(new Path.Circle(point, 10));
+			circ[count].style = style;
+			if (guess < 0) circ[count].fillColor = color;
+
+
+
+			// Increments the count
+			count++;
+			console.log("count:", count);
+		}
 	}
-
 }
 
 
