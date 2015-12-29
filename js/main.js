@@ -100,37 +100,6 @@ function setup() {
 		training[i] = new Trainer(x, y, answer);
 		// console.log("training[i]", training[i]);
 	}
-
-
-
-
-
-	//// Perceptron visualisation
-	var circ = new Path.Circle(view.center, 100);
-	circ.style = style;
-	circ.fillColor = color;
-	var rad = 300
-
-	// var from = view.center + new Point(0, -rad);
-	var through = view.center + new Point(-rad, 0);
-	// var to = view.center + new Point(0, rad);
-	var outPt = view.center + new Point(rad, 0);
-
-	// var arc = new Path.Arc(from, through, to);
-	// arc.style = style;
-
-	var Lines = [];
-	for (var i = 0; i < 3; i++) {
-		Lines[i] = new Path.Line(through, view.center);
-		Lines[i].rotate(-15 + 15 * i, view.center);
-		Lines[i].style = style;
-	}
-	Lines.push(new Path.Line(outPt, view.center));
-	Lines[Lines.length - 1].style = style;
-
-	var texts = [];
-
-
 }
 
 
@@ -153,17 +122,9 @@ function onFrame() {
 
 
 			// Draws the circles representing the (x,y) locations of every point
-			/*circ.push(new Path.Circle(point, 10));
+			circ.push(new Path.Circle(point, 10));
 			circ[count].style = style;
-			if (guess < 0) circ[count].fillColor = color;*/
-
-
-
-
-
-
-
-
+			if (guess < 0) circ[count].fillColor = color;
 
 
 
